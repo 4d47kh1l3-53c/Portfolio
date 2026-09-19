@@ -156,3 +156,4 @@ const lazyLoadObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.section').forEach(section => {
     lazyLoadObserver.observe(section);
 });
+
