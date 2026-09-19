@@ -157,3 +157,42 @@ document.querySelectorAll('.section').forEach(section => {
     lazyLoadObserver.observe(section);
 });
 
+// Mobile hamburger menu
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.getElementById('nav-menu');
+const mobileNavQuery = window.matchMedia('(max-width: 768px)');
+
+function setMenu(open) {
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    navMenu.classList.toggle('open', open);
+}
+
+const isMenuOpen = () => navToggle.getAttribute('aria-expanded') === 'true';
+
+navToggle.addEventListener('click', () => setMenu(!isMenuOpen()));
+
+// Close after choosing a link
+navMenu.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => setMenu(false));
+});
+
+// Close when tapping outside the nav
+document.addEventListener('click', (e) => {
+    if (isMenuOpen() && !e.target.closest('.nav')) {
+        setMenu(false);
+    }
+});
+
+// Close with Escape and return focus to the button
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isMenuOpen()) {
+        setMenu(false);
+        navToggle.focus();
+    }
+});
+
+// Reset when the viewport grows back to desktop size
+mobileNavQuery.addEventListener('change', (e) => {
+    if (!e.matches) setMenu(false);
+});
